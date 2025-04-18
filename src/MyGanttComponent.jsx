@@ -53,7 +53,11 @@ const MyGanttComponent = () => {
     { unit: "day", step: 1, format: "d" },
   ];
 
-  return <Gantt tasks={tasks} links={links} scales={scales} />;
+  return (
+    <div className="h-full w-full">
+      <Gantt tasks={tasks} links={links} scales={scales} />
+    </div>
+  );
 };
 
 export default MyGanttComponent;
