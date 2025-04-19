@@ -8,7 +8,7 @@ const MyGanttComponent = () => {
       id: 20,
       text: "New Task",
       start: new Date(2024, 5, 11),
-      end: new Date(2024, 6, 12),
+      end: new Date(2024, 5, 12),
       duration: 1,
       progress: 2,
       type: "task",
@@ -18,7 +18,7 @@ const MyGanttComponent = () => {
       id: 47,
       text: "[1] Master project",
       start: new Date(2024, 5, 12),
-      end: new Date(2024, 7, 12),
+      end: new Date(2024, 5, 13),
       duration: 8,
       progress: 0,
       parent: 0,
@@ -27,8 +27,8 @@ const MyGanttComponent = () => {
     {
       id: 22,
       text: "Task",
-      start: new Date(2024, 7, 11),
-      end: new Date(2024, 8, 12),
+      start: new Date(2024, 5, 11),
+      end: new Date(2024, 5, 12),
       duration: 8,
       progress: 0,
       parent: 47,
@@ -37,8 +37,8 @@ const MyGanttComponent = () => {
     {
       id: 21,
       text: "New Task 2",
-      start: new Date(2024, 7, 10),
-      end: new Date(2024, 8, 12),
+      start: new Date(2024, 5, 10),
+      end: new Date(2024, 5, 12),
       duration: 3,
       progress: 0,
       type: "task",
@@ -55,7 +55,13 @@ const MyGanttComponent = () => {
 
   return (
     <div className="h-full w-full">
-      <Gantt tasks={tasks} links={links} scales={scales} />
+      <Gantt
+        tasks={tasks}
+        startDate={new Date(2024, 5, 11)}
+        endDate={new Date(2024, 5, 13)}
+        // links={links}
+        scales={scales}
+      />
     </div>
   );
 };
