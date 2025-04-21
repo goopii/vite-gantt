@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DatePicker } from './DatePickerComponent'; // Import the DatePicker
 
 // Basic example editor for terrainModification tasks
 const TerrainModificationEditor = ({ task, onAction }) => {
@@ -8,6 +9,11 @@ const TerrainModificationEditor = ({ task, onAction }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Specific handler for date changes from DatePicker
+  const handleDateChange = (fieldName, date) => {
+    setFormData(prev => ({ ...prev, [fieldName]: date }));
   };
 
   const handleSave = () => {
@@ -46,20 +52,18 @@ const TerrainModificationEditor = ({ task, onAction }) => {
         </div>
         <div>
           <label>Start Date:</label>
-          <input
-            type="date"
-            name="start" // Corresponds to task property
-            value={formData.start ? new Date(formData.start).toISOString().split('T')[0] : ''} // Format date for input
-            onChange={handleChange}
+          {/* Replace input with DatePicker */}
+          <DatePicker 
+            value={formData.start ? new Date(formData.start) : undefined}
+            onDateChange={(date) => handleDateChange('start', date)}
           />
         </div>
          <div>
           <label>End Date:</label>
-          <input
-            type="date"
-            name="end" // Corresponds to task property
-            value={formData.end ? new Date(formData.end).toISOString().split('T')[0] : ''} // Format date for input
-            onChange={handleChange}
+           {/* Replace input with DatePicker */}
+          <DatePicker 
+            value={formData.end ? new Date(formData.end) : undefined}
+            onDateChange={(date) => handleDateChange('end', date)}
           />
         </div>
          {/* Add other relevant fields for terrainModification */}
