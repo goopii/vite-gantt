@@ -22,6 +22,8 @@ export const data = {
       start: parse('2025-04-01', 'yyyy-MM-dd', new Date()),
       end: parse('2025-04-15', 'yyyy-MM-dd', new Date()),
       type: "terrainModification",
+      // CUSTOM PROPERTIES
+      myCustomProperty: "myCustomValue",
     },
   ],
   links: [],

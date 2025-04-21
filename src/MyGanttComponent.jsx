@@ -8,17 +8,16 @@ import TerrainModificationEditor from "./TerrainModificationEditor";
 const MyGanttComponent = () => {
   const apiRef = useRef(null);
   const [taskToEdit, setTaskToEdit] = useState(null);
-  const [store, setStore] = useState(null);
+  const [tasks, setTasks] = useState(null);
 
   useEffect(() => {
     if (apiRef.current) {
       const api = apiRef.current;
-      setStore(api.getState().tasks);
 
       const interceptorId = api.intercept("show-editor", (data) => {
-        if (!store) return true;
+        if (!tasks) return true;
 
-        const task = store.byId(data.id);
+        const task = tasks.byId(data.id);
         if (task && task.type === "terrainModification") {
           setTaskToEdit(task);
           return false;
@@ -30,7 +29,7 @@ const MyGanttComponent = () => {
         api.detach("show-editor", interceptorId);
       };
     }
-  }, [apiRef, store]);
+  }, [tasks]);
 
   const handleFormAction = (action = null, data = null) => {
     console.log("Action received from custom editor:", action, data);
@@ -41,6 +40,10 @@ const MyGanttComponent = () => {
     switch (action) {
       case "update-task":
         if (apiRef.current) {
+          if (!data) {
+            console.warn("No data provided for update-task action");
+            return;
+          }
           apiRef.current.exec(action, data);
           setTaskToEdit(null);
         }
@@ -56,10 +59,10 @@ const MyGanttComponent = () => {
       <Gantt
         init={(api) => {
           apiRef.current = api;
-          setStore(api.getState().tasks);
-          api.on("update-task", () => setStore(api.getState().tasks));
-          api.on("add-task", () => setStore(api.getState().tasks));
-          api.on("delete-task", () => setStore(api.getState().tasks));
+          setTasks(api.getState().tasks);
+          api.on("update-task", () => setTasks(api.getState().tasks));
+          api.on("add-task", () => setTasks(api.getState().tasks));
+          api.on("delete-task", () => setTasks(api.getState().tasks));
         }}
         start={config.start}
         end={config.end}
@@ -75,7 +78,6 @@ const MyGanttComponent = () => {
       />
       {taskToEdit && (
         <TerrainModificationEditor
-          apiRef={apiRef}
           task={taskToEdit}
           onAction={handleFormAction}
         />

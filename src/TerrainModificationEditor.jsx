@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,31 +8,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogDescription, // Optional: if you want a description area
 } from "@/components/ui/dialog";
-import { DatePicker } from './DatePickerComponent'; // Assuming this uses Shadcn's DatePicker setup
-import { isValid, parseISO, format, isDate } from 'date-fns'; // Import date-fns functions
+import { DatePicker } from './DatePickerComponent';
 
-// Basic example editor for terrainModification tasks
-const TerrainModificationEditor = ({apiRef, task, onAction }) => {
+const TerrainModificationEditor = ({ task, onAction }) => {
   const [formData, setFormData] = useState({ ...task });
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    console.log(apiRef.current);
     setFormData({
       ...task
     });
     setIsOpen(true);
   }, [task]);
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(e.target);
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -68,7 +59,7 @@ const TerrainModificationEditor = ({apiRef, task, onAction }) => {
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Terrain Modification: {task?.text}</DialogTitle>
+          <DialogTitle>{task.text}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -90,7 +81,7 @@ const TerrainModificationEditor = ({apiRef, task, onAction }) => {
             <DatePicker
               className="col-span-3"
               value={formData.start}
-              onDateChange={handleChange}
+              onDateChange={(date) => handleDateChange("start", date)}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -101,6 +92,17 @@ const TerrainModificationEditor = ({apiRef, task, onAction }) => {
               className="col-span-3"
               value={formData.end || formData.start}
               onDateChange={(date) => handleDateChange("end", date)}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="myCustomProperty" className="text-right">
+              My Custom Property
+            </Label>
+            <Input
+              id="myCustomProperty"
+              name="myCustomProperty"
+              value={formData.myCustomProperty || ""}
+              onChange={handleChange}
             />
           </div>
         </div>
