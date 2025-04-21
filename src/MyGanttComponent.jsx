@@ -1,66 +1,24 @@
 import { Gantt } from "wx-react-gantt";
 import "wx-react-gantt/dist/gantt.css";
-// import React, { useRef, useEffect } from "react";
+import { data } from "./data";
+import { config } from "./config";
 
 const MyGanttComponent = () => {
-  const tasks = [
-    {
-      id: 20,
-      text: "New Task",
-      start: new Date(2024, 5, 11),
-      end: new Date(2024, 5, 12),
-      duration: 1,
-      progress: 2,
-      type: "task",
-      lazy: false,
-    },
-    {
-      id: 47,
-      text: "[1] Master project",
-      start: new Date(2024, 5, 12),
-      end: new Date(2024, 5, 13),
-      duration: 8,
-      progress: 0,
-      parent: 0,
-      type: "summary",
-    },
-    {
-      id: 22,
-      text: "Task",
-      start: new Date(2024, 5, 11),
-      end: new Date(2024, 5, 12),
-      duration: 8,
-      progress: 0,
-      parent: 47,
-      type: "task",
-    },
-    {
-      id: 21,
-      text: "New Task 2",
-      start: new Date(2024, 5, 10),
-      end: new Date(2024, 5, 12),
-      duration: 3,
-      progress: 0,
-      type: "task",
-      lazy: false,
-    },
-  ];
-
-  const links = [{ id: 1, source: 20, target: 21, type: "e2e" }];
-
-  const scales = [
-    { unit: "month", step: 1, format: "MMMM yyy" },
-    { unit: "day", step: 1, format: "d" },
-  ];
-
   return (
     <div className="h-full w-full">
       <Gantt
-        tasks={tasks}
-        startDate={new Date(2024, 5, 11)}
-        endDate={new Date(2024, 5, 13)}
-        // links={links}
-        scales={scales}
+        // CONFIG
+        start={config.start}
+        end={config.end}
+        lengthUnit={config.lengthUnit}
+        scales={config.scales}
+        cellWidth={config.cellWidth}
+        columns={config.columns}
+        taskTypes={config.taskTypes}
+        taskTemplate={config.MyTaskContent}
+        // DATA
+        tasks={data.tasks}
+        links={data.links}
       />
     </div>
   );
