@@ -52,7 +52,6 @@ const TerrainModificationEditor = ({ task, onAction }) => {
         </div>
         <div>
           <label>Start Date:</label>
-          {/* Replace input with DatePicker */}
           <DatePicker 
             value={formData.start ? new Date(formData.start) : undefined}
             onDateChange={(date) => handleDateChange('start', date)}
@@ -60,7 +59,6 @@ const TerrainModificationEditor = ({ task, onAction }) => {
         </div>
          <div>
           <label>End Date:</label>
-           {/* Replace input with DatePicker */}
           <DatePicker 
             value={formData.end ? new Date(formData.end) : undefined}
             onDateChange={(date) => handleDateChange('end', date)}

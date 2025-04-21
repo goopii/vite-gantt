@@ -1,26 +1,26 @@
-import { DateGantt } from "./utils/DateGantt";
+import { parse } from 'date-fns';
 
 export const data = {
   tasks: [
     {
       id: 20,
       text: "TESTING Task 1",
-      start: new DateGantt(2025, 4, 1, false),
-      end: new DateGantt(2025, 4, 15, true),
+      start: parse('2025-04-01', 'yyyy-MM-dd', new Date()),
+      end: parse('2025-04-15', 'yyyy-MM-dd', new Date()),
       type: "task",
     },
     {
       id: 21,
       text: "TESTING Task 2",
-      start: new DateGantt(2025, 4, 1, false),
-      end: new DateGantt(2025, 4, 7, true),
+      start: parse('2025-04-01', 'yyyy-MM-dd', new Date()),
+      end: parse('2025-04-07', 'yyyy-MM-dd', new Date()),
       type: "task",
     },
     {
       id: 22,
       text: "TESTING Terrain Modification",
-      start: new DateGantt(2025, 4, 1, false),
-      end: new DateGantt(2025, 4, 15, true),
+      start: parse('2025-04-01', 'yyyy-MM-dd', new Date()),
+      end: parse('2025-04-15', 'yyyy-MM-dd', new Date()),
       type: "terrainModification",
     },
   ],

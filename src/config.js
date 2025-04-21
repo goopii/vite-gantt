@@ -1,9 +1,12 @@
 import MyTaskContent from "./MyTaskContent";
-import { DateGantt } from "./utils/DateGantt";
+import { parse, add } from 'date-fns';
+
+const startDate = parse('2025-04-01', 'yyyy-MM-dd', new Date());
+const endDate = add(parse('2025-04-15', 'yyyy-MM-dd', new Date()), { days: 1 });
 
 export const config = {
-  start: new DateGantt(2025, 4, 1, false),
-  end: new DateGantt(2025, 4, 15, true),
+  start: startDate,
+  end: endDate,
   lengthUnit: "day",
   scales: [
     { unit: "month", step: 1, format: "MMMM yyy" },

@@ -11,7 +11,6 @@ const MyGanttComponent = () => {
   const [store, setStore] = useState(null);
 
   useEffect(() => {
-    console.log("apiRef.current", apiRef.current);
     if (apiRef.current) {
       const api = apiRef.current;
       setStore(api.getState().tasks);
