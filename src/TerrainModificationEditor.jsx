@@ -1,85 +1,119 @@
-import React, { useState } from 'react';
-import { DatePicker } from './DatePickerComponent'; // Import the DatePicker
+import React, { useState, useEffect, useRef } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription, // Optional: if you want a description area
+} from "@/components/ui/dialog";
+import { DatePicker } from './DatePickerComponent'; // Assuming this uses Shadcn's DatePicker setup
+import { isValid, parseISO, format, isDate } from 'date-fns'; // Import date-fns functions
 
 // Basic example editor for terrainModification tasks
-const TerrainModificationEditor = ({ task, onAction }) => {
-  // Use state to manage form data, initialized with task data
+const TerrainModificationEditor = ({apiRef, task, onAction }) => {
   const [formData, setFormData] = useState({ ...task });
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    console.log(apiRef.current);
+    setFormData({
+      ...task
+    });
+    setIsOpen(true);
+  }, [task]);
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(e.target);
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   // Specific handler for date changes from DatePicker
+  // Assumes DatePicker returns a Date object or undefined
   const handleDateChange = (fieldName, date) => {
     setFormData(prev => ({ ...prev, [fieldName]: date }));
   };
 
   const handleSave = () => {
-    // Pass the 'update-task' action and the modified data back
-    onAction({ action: 'update-task', data: formData });
+    const updatedTaskData = {
+        id: task.id,
+        task: formData
+    };
+    onAction("update-task", updatedTaskData);
+    setIsOpen(false);
   };
 
   const handleCancel = () => {
-    // Pass a 'close-form' action back
-    onAction({ action: 'close-form' });
+    onAction(null);
+    setFormData({})
+    setIsOpen(false);
   };
 
-  // Simple form layout - customize this with actual fields
+  const handleOpenChange = (open) => {
+    if (!open) {
+      handleCancel();
+    }
+    setIsOpen(open);
+  };
+
   return (
-    <div style={{
-      position: 'fixed', // Example styling to overlay
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      padding: '20px',
-      background: 'white',
-      border: '1px solid #ccc',
-      boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-      zIndex: 1000, // Ensure it's above the Gantt chart
-    }}>
-      <h3>Editing Terrain Modification: {task.text}</h3>
-      <form>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="text" // Corresponds to task property
-            value={formData.text || ''}
-            onChange={handleChange}
-          />
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit Terrain Modification: {task?.text}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="text" className="text-right">
+              Name
+            </Label>
+            <Input
+              id="text"
+              name="text"
+              value={formData.text || ""}
+              onChange={handleChange}
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="start" className="text-right">
+              Start Date
+            </Label>
+            <DatePicker
+              className="col-span-3"
+              value={formData.start}
+              onDateChange={handleChange}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="end" className="text-right">
+              End Date
+            </Label>
+            <DatePicker
+              className="col-span-3"
+              value={formData.end || formData.start}
+              onDateChange={(date) => handleDateChange("end", date)}
+            />
+          </div>
         </div>
-        <div>
-          <label>Start Date:</label>
-          <DatePicker 
-            value={formData.start ? new Date(formData.start) : undefined}
-            onDateChange={(date) => handleDateChange('start', date)}
-          />
-        </div>
-         <div>
-          <label>End Date:</label>
-          <DatePicker 
-            value={formData.end ? new Date(formData.end) : undefined}
-            onDateChange={(date) => handleDateChange('end', date)}
-          />
-        </div>
-         {/* Add other relevant fields for terrainModification */}
-        <div>
-            <label>Modification Type:</label>
-            <input
-                type="text"
-                name="modificationType" // Example custom field
-                value={formData.modificationType || ''}
-                onChange={handleChange}
-             />
-        </div>
-        <div>
-          <button type="button" onClick={handleSave}>Save</button>
-          <button type="button" onClick={handleCancel}>Cancel</button>
-        </div>
-      </form>
-    </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button type="button" onClick={handleSave}>
+            Save Changes
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

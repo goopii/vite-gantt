@@ -15,13 +15,6 @@ const MyGanttComponent = () => {
       const api = apiRef.current;
       setStore(api.getState().tasks);
 
-      api.on("zoom-scale", () => {
-        console.log(
-          "The current zoom level is",
-          apiRef.current.getState().zoom
-        );
-      });
-
       const interceptorId = api.intercept("show-editor", (data) => {
         if (!store) return true;
 
@@ -39,14 +32,13 @@ const MyGanttComponent = () => {
     }
   }, [apiRef, store]);
 
-  const handleFormAction = (ev) => {
-    const { action, data } = ev;
+  const handleFormAction = (action = null, data = null) => {
     console.log("Action received from custom editor:", action, data);
-
+    if (!action) {
+      setTaskToEdit(null);
+      return;
+    }
     switch (action) {
-      case "close-form":
-        setTaskToEdit(null);
-        break;
       case "update-task":
         if (apiRef.current) {
           apiRef.current.exec(action, data);
@@ -83,6 +75,7 @@ const MyGanttComponent = () => {
       />
       {taskToEdit && (
         <TerrainModificationEditor
+          apiRef={apiRef}
           task={taskToEdit}
           onAction={handleFormAction}
         />
