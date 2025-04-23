@@ -44,6 +44,30 @@ const MyGanttComponent = () => {
             console.warn("No data provided for update-task action");
             return;
           }
+
+          // Check if the updated task has a child and shift it if needed
+          const updatedTask = data.task;
+          if (updatedTask.mapChild && tasks) {
+            const childTask = tasks.byId(updatedTask.mapChild);
+            if (childTask && childTask.start < updatedTask.end) {
+              // Calculate new end date based on child's duration
+              const newEndDate = new Date(updatedTask.end);
+              newEndDate.setDate(newEndDate.getDate() + childTask.duration);
+
+              // Update child task
+              const childUpdate = {
+                id: childTask.id,
+                task: {
+                  ...childTask,
+                  start: updatedTask.end,
+                  end: newEndDate
+                }
+              };
+              apiRef.current.exec(action, childUpdate);
+            }
+          }
+
+          // Update the original task
           apiRef.current.exec(action, data);
           setTaskToEdit(null);
         }
@@ -79,6 +103,7 @@ const MyGanttComponent = () => {
       {taskToEdit && (
         <TerrainModificationEditor
           task={taskToEdit}
+          tasks={tasks}
           onAction={handleFormAction}
         />
       )}

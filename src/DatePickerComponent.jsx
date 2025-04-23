@@ -13,9 +13,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function DatePicker({ value, onDateChange }) {
+export function DatePicker({ value, onDateChange, minDate, maxDate }) {
+  const [open, setOpen] = React.useState(false)
+
+  const handleDateSelect = (date) => {
+    onDateChange(date)
+    setOpen(false)
+  }
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -32,8 +39,13 @@ export function DatePicker({ value, onDateChange }) {
         <Calendar
           mode="single"
           selected={value}
-          onSelect={onDateChange}
+          onSelect={handleDateSelect}
           initialFocus
+          disabled={(date) => {
+            if (minDate && date < minDate) return true;
+            if (maxDate && date > maxDate) return true;
+            return false;
+          }}
         />
       </PopoverContent>
     </Popover>

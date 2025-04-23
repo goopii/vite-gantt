@@ -1,8 +1,8 @@
 import MyTaskContent from "./MyTaskContent";
-import { parse, add } from 'date-fns';
+import { parse, addDays } from 'date-fns';
 
 const startDate = parse('2025-04-01', 'yyyy-MM-dd', new Date());
-const endDate = add(parse('2025-04-15', 'yyyy-MM-dd', new Date()), { days: 1 });
+const endDate = addDays(parse('2025-04-30', 'yyyy-MM-dd', new Date()), 1);
 
 export const config = {
   start: startDate,
